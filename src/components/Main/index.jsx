@@ -195,7 +195,67 @@ const render3D = (canvasRef) => {
         }
     }
 
-    const {positions, normals, indices} = world.generateGeometryDataForCell(0, 0, 0);
+
+    const vertices = [
+        // 앞쪽
+        { pos: [-1, -1,  1], norm: [ 0,  0,  1], uv: [0, 0], },
+        { pos: [ 1, -1,  1], norm: [ 0,  0,  1], uv: [1, 0], },
+        { pos: [-1,  1,  1], norm: [ 0,  0,  1], uv: [0, 1], },
+
+        // { pos: [-1,  1,  1], norm: [ 0,  0,  1], uv: [0, 1], },
+        // { pos: [ 1, -1,  1], norm: [ 0,  0,  1], uv: [1, 0], },
+        { pos: [ 1,  1,  1], norm: [ 0,  0,  1], uv: [1, 1], },
+        // 오른쪽
+        { pos: [ 1, -1,  1], norm: [ 1,  0,  0], uv: [0, 0], },
+        { pos: [ 1, -1, -1], norm: [ 1,  0,  0], uv: [1, 0], },
+        // { pos: [ 1,  1,  1], norm: [ 1,  0,  0], uv: [0, 1], },
+
+        { pos: [ 1,  1,  1], norm: [ 1,  0,  0], uv: [0, 1], },
+        // { pos: [ 1, -1, -1], norm: [ 1,  0,  0], uv: [1, 0], },
+        { pos: [ 1,  1, -1], norm: [ 1,  0,  0], uv: [1, 1], },
+        // 뒤쪽
+        { pos: [ 1, -1, -1], norm: [ 0,  0, -1], uv: [0, 0], },
+        { pos: [-1, -1, -1], norm: [ 0,  0, -1], uv: [1, 0], },
+        // { pos: [ 1,  1, -1], norm: [ 0,  0, -1], uv: [0, 1], },
+
+        { pos: [ 1,  1, -1], norm: [ 0,  0, -1], uv: [0, 1], },
+        // { pos: [-1, -1, -1], norm: [ 0,  0, -1], uv: [1, 0], },
+        { pos: [-1,  1, -1], norm: [ 0,  0, -1], uv: [1, 1], },
+        // 왼쪽
+        { pos: [-1, -1, -1], norm: [-1,  0,  0], uv: [0, 0], },
+        { pos: [-1, -1,  1], norm: [-1,  0,  0], uv: [1, 0], },
+        // { pos: [-1,  1, -1], norm: [-1,  0,  0], uv: [0, 1], },
+
+        { pos: [-1,  1, -1], norm: [-1,  0,  0], uv: [0, 1], },
+        // { pos: [-1, -1,  1], norm: [-1,  0,  0], uv: [1, 0], },
+        { pos: [-1,  1,  1], norm: [-1,  0,  0], uv: [1, 1], },
+        // 상단
+        { pos: [ 1,  1, -1], norm: [ 0,  1,  0], uv: [0, 0], },
+        { pos: [-1,  1, -1], norm: [ 0,  1,  0], uv: [1, 0], },
+        // { pos: [ 1,  1,  1], norm: [ 0,  1,  0], uv: [0, 1], },
+
+        { pos: [ 1,  1,  1], norm: [ 0,  1,  0], uv: [0, 1], },
+        // { pos: [-1,  1, -1], norm: [ 0,  1,  0], uv: [1, 0], },
+        { pos: [-1,  1,  1], norm: [ 0,  1,  0], uv: [1, 1], },
+        // 하단
+        { pos: [ 1, -1,  1], norm: [ 0, -1,  0], uv: [0, 0], },
+        { pos: [-1, -1,  1], norm: [ 0, -1,  0], uv: [1, 0], },
+        // { pos: [ 1, -1, -1], norm: [ 0, -1,  0], uv: [0, 1], },
+
+        { pos: [ 1, -1, -1], norm: [ 0, -1,  0], uv: [0, 1], },
+        // { pos: [-1, -1,  1], norm: [ 0, -1,  0], uv: [1, 0], },
+        { pos: [-1, -1, -1], norm: [ 0, -1,  0], uv: [1, 1], },
+    ];
+    const positions = [];
+    const normals = [];
+    const uvs = [];
+    for (const vertex of vertices) {
+        positions.push(...vertex.pos);
+        normals.push(...vertex.norm);
+        uvs.push(...vertex.uv);
+    }
+
+    // const {positions, normals, indices} = world.generateGeometryDataForCell(0, 0, 0);
     const geometry = new THREE.BufferGeometry();
     const material = new THREE.MeshLambertMaterial({color: 'green'});
 
@@ -207,7 +267,16 @@ const render3D = (canvasRef) => {
     geometry.setAttribute(
         'normal',
         new THREE.BufferAttribute(new Float32Array(normals), normalNumComponents));
-    geometry.setIndex(indices);
+    // geometry.setIndex(indices);
+    geometry.setIndex([
+        0,  1,  2,   2,  1,  3,
+        4,  5,  6,   6,  5,  7,
+        8,  9, 10,  10,  9, 11,
+        12, 13, 14,  14, 13, 15,
+        16, 17, 18,  18, 17, 19,
+        20, 21, 22,  22, 21, 23,
+    ]);
+
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
@@ -262,7 +331,7 @@ const Main = () => {
             <div>
                 <canvas
                     ref={canvasRef}
-                    width={"1400"}
+                    width={"1500"}
                     height={"700"}
                 />
             </div>
